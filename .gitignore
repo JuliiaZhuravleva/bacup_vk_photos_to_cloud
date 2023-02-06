@@ -1,3 +1,6 @@
 .idea/
 venv/
 __pycache__/
+*.ini
+!example.ini
+temp.txt

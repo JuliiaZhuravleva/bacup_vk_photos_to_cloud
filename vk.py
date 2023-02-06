@@ -11,6 +11,26 @@ class VkUser:
             'v': version
         }
 
+    def get_group_id_by_screen_name(self, screen_name):
+        get_group_url = self.url + 'groups.getById'
+        get_group_params = {'group_id': screen_name}
+        result = requests.get(get_group_url, params={**self.params, **get_group_params}).json()
+        if 'error' in result:
+            group_id = 0
+        else:
+            group_id = f"-{result['response'][0]['id']}"
+        return group_id
+
+    def get_user_id_by_screen_name(self, screen_name):
+        get_user_url = self.url + 'users.get'
+        get_user_params = {'user_ids': screen_name}
+        result = requests.get(get_user_url, params={**self.params, **get_user_params}).json()
+        if result['response']:
+            user_id = result['response'][0]['id']
+        else:
+            user_id = self.get_group_id_by_screen_name(screen_name)
+        return user_id
+
     def photos_get(self, owner_id, album_id='profile', photos_count=1000):
         photos_get_url = self.url + 'photos.get'
         if photos_count < 1000:
